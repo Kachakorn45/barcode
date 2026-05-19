@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Barcode Scanner & Generator</title>
+  <title>HUMAN MADE - Barcode System</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
   
@@ -13,83 +16,98 @@
       --mallard-green: #2B533E;
       --duck-yellow: #F2B824;
       --sterling-silver: #C0C0C0;
-      --dark-green: #1e3a2b;
+      --vintage-cream: #F9F6F0;
+      --dark-charcoal: #1A1A1A;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       background-color: var(--mallard-green);
-      color: #ffffff;
+      color: var(--vintage-cream);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       box-sizing: border-box;
     }
 
     .app-card {
-      background-color: var(--dark-green);
-      border: 1px solid var(--sterling-silver);
-      padding: 30px;
-      border-radius: 16px;
+      background-color: var(--dark-charcoal);
+      border: 3px solid var(--sterling-silver);
+      padding: 35px 25px;
+      border-radius: 24px; /* ทรงโค้ดมนสไตล์ Human Made */
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      box-sizing: border-box;
     }
 
-    h2 {
+    h1.brand-title {
+      font-weight: 800;
+      font-size: 26px;
       color: var(--duck-yellow);
       margin: 0 0 5px 0;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     .subtitle {
       color: var(--sterling-silver);
-      font-size: 13px;
-      margin-bottom: 25px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 30px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
     }
 
+    /* โซนกล้องสแกนที่ขยายกรอบให้ใหญ่ขึ้น */
     #reader {
-      width: 100%;
-      border-radius: 12px;
+      width: 100% !important;
+      border-radius: 16px;
       overflow: hidden;
       border: 2px solid var(--sterling-silver);
       background-color: #000;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+    }
+
+    /* ตกแต่งวิดีโอกล้องด้านใน */
+    #reader video {
+      object-fit: cover !important;
     }
 
     .input-box {
       width: 100%;
-      padding: 14px;
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--sterling-silver);
-      border-radius: 8px;
+      padding: 16px;
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--sterling-silver);
+      border-radius: 12px;
       color: #fff;
       font-size: 16px;
+      font-weight: 600;
       text-align: center;
       outline: none;
       box-sizing: border-box;
       transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
     }
 
     .input-box:focus {
       border-color: var(--duck-yellow);
-      box-shadow: 0 0 8px rgba(242, 184, 36, 0.2);
+      background-color: rgba(255, 255, 255, 0.07);
     }
 
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 15px;
-      font-weight: bold;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
       transition: all 0.2s ease;
       margin-bottom: 15px;
@@ -97,17 +115,17 @@
 
     .btn-main {
       background-color: var(--duck-yellow);
-      color: var(--dark-green);
+      color: var(--dark-charcoal);
     }
 
     .btn-main:hover {
-      background-color: #db0;
+      background-color: #e5ad1c;
       transform: translateY(-1px);
     }
 
     .btn-secondary {
       background-color: transparent;
-      border: 1px solid var(--sterling-silver);
+      border: 2px solid var(--sterling-silver);
       color: var(--sterling-silver);
     }
 
@@ -117,20 +135,22 @@
     }
 
     .barcode-result {
-      margin-top: 25px;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 12px;
+      margin-top: 30px;
+      padding: 25px 15px;
+      background-color: var(--vintage-cream); /* พื้นสีครีมวินเทจรองหลังแท่งบาร์โค้ด */
+      border-radius: 16px;
+      border: 2px solid var(--duck-yellow);
       display: none;
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn 0.35s ease-out;
     }
 
     #barcode {
       max-width: 100%;
+      height: auto;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
@@ -138,18 +158,18 @@
 <body>
 
   <div class="app-card">
-    <h2>BARCODE SYSTEM</h2>
-    <div class="subtitle">Prefix: 110765</div>
+    <h1 class="brand-title">GEARS FOR FUTURISTIC TEENAGERS</h1>
+    <div class="subtitle">AUTOMATIC BARCODE • PREFIX 110765</div>
     
-    <button class="btn btn-main" id="camBtn" onclick="toggleCamera()">เปิดกล้องสแกน</button>
+    <button class="btn btn-main" id="camBtn" onclick="toggleCamera()">เปิดกล้องสแกนเนอร์</button>
     
     <div id="reader" style="display: none;"></div>
     
-    <input type="text" id="scanInput" class="input-box" placeholder="หรือพิมพ์รหัสที่นี่..." autocomplete="off">
+    <input type="text" id="scanInput" class="input-box" placeholder="ALIGN CODE OR TYPE HERE..." autocomplete="off">
 
     <div class="barcode-result" id="resultBox">
       <svg id="barcode"></svg>
-      <button class="btn btn-secondary" style="margin-top:15px; margin-bottom:0;" onclick="resetForm()">ล้างหน้าจอ</button>
+      <button class="btn btn-secondary" style="margin-top:20px; margin-bottom:0;" onclick="resetForm()">ล้างข้อมูล</button>
     </div>
   </div>
 
@@ -159,28 +179,45 @@
     const camBtn = document.getElementById('camBtn');
     let html5QrcodeScanner = null;
 
-    // ระบบสแกนด้วยกล้อง
     function toggleCamera() {
       const readerDiv = document.getElementById('reader');
       
       if (readerDiv.style.display === "none") {
         readerDiv.style.display = "block";
-        camBtn.innerText = "ปิดกล้อง";
+        camBtn.innerText = "ปิดหน้ากล้อง";
         camBtn.style.backgroundColor = "#d9534f";
         camBtn.style.color = "#fff";
         
-        html5QrcodeScanner = new Html5Qrcode("reader");
-        html5QrcodeScanner.start(
-          { facingMode: "environment" }, 
-          { fps: 15, qrbox: { width: 260, height: 160 } },
-          (decodedText) => {
-            scanInput.value = decodedText;
-            generateBarcode(decodedText);
+        // ค้นหาอุปกรณ์กล้องทั้งหมดเพื่อเจาะจงกล้องหลังที่ถูกต้อง
+        Html5Qrcode.getCameras().then(cameras => {
+          if (cameras && cameras.length > 0) {
+            // เลือกกล้องตัวสุดท้าย (มักจะเป็นกล้องหลังตัวหลักของมือถือรุ่นใหม่ๆ)
+            const backCameraId = cameras[cameras.length - 1].id;
+            
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            html5QrcodeScanner.start(
+              backCameraId, 
+              { 
+                fps: 20, 
+                // ปรับเพิ่มขนาดช่องเล็งเป็น 300x300 ใหญ่เต็มตา สแกน QR ได้ง่ายขึ้นมากครับ
+                qrbox: { width: 300, height: 300 } 
+              },
+              (decodedText) => {
+                scanInput.value = decodedText;
+                generateBarcode(decodedText);
+                stopCamera();
+              },
+              (err) => { /* ล่าเป้าหมาย */ }
+            ).catch(err => {
+              alert("ไม่สามารถเริ่มระบบกล้องได้: " + err);
+              stopCamera();
+            });
+          } else {
+            alert("ไม่พบกล้องถ่ายรูปบนอุปกรณ์นี้");
             stopCamera();
-          },
-          (err) => { /* ปล่อยผ่านช่วงจับโฟกัส */ }
-        ).catch(err => {
-          alert("ไม่สามารถเข้าถึงกล้องได้: " + err);
+          }
+        }).catch(err => {
+          alert("ไม่สามารถเข้าถึงรายชื่อกล้องได้: " + err);
           stopCamera();
         });
       } else {
@@ -193,32 +230,30 @@
       if (html5QrcodeScanner) {
         html5QrcodeScanner.stop().then(() => {
           readerDiv.style.display = "none";
-          camBtn.innerText = "เปิดกล้องสแกน";
+          camBtn.innerText = "เปิดกล้องสแกนเนอร์";
           camBtn.style.backgroundColor = "var(--duck-yellow)";
-          camBtn.style.color = "var(--dark-green)";
+          camBtn.style.color = "var(--dark-charcoal)";
         }).catch(err => console.log(err));
       }
     }
 
-    // ระบบเจนบาร์โค้ด
     function generateBarcode(rawValue) {
       if (!rawValue) return;
-      
-      // รวมเลข 110765 ด้านหน้าเสมอ
       const finalCode = "110765" + rawValue;
 
       JsBarcode("#barcode", finalCode, {
         format: "CODE128",
-        lineColor: "#000000",
+        lineColor: "#1A1A1A",
+        background: "#F9F6F0",
         width: 2,
         height: 75,
-        displayValue: true
+        displayValue: true,
+        font: "Inter"
       });
 
       resultBox.style.display = "block";
     }
 
-    // ดักจับปุ่ม Enter (กรณีพนักงานพิมพ์เอง หรือใช้เครื่องยิง)
     scanInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         generateBarcode(scanInput.value.trim());
