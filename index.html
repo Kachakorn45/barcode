@@ -45,11 +45,17 @@
       box-sizing: border-box;
     }
 
-    h1.brand-title {
+    /* โลโก้เป็ด Human Made */
+    .brand-logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1.welcome-title {
       font-weight: 800;
-      font-size: 26px;
+      font-size: 28px;
       color: var(--duck-yellow);
-      margin: 0 0 5px 0;
+      margin: 0 0 10px 0;
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
@@ -58,9 +64,16 @@
       color: var(--sterling-silver);
       font-size: 11px;
       font-weight: 600;
-      margin-bottom: 30px;
+      margin-bottom: 5px;
       text-transform: uppercase;
       letter-spacing: 2px;
+    }
+
+    .credit-text {
+      color: var(--vintage-cream);
+      font-size: 10px;
+      font-weight: 400;
+      margin-bottom: 30px;
     }
 
     /* โซนกล้องสแกนที่ขยายกรอบให้ใหญ่ขึ้น */
@@ -134,6 +147,12 @@
       border-color: #fff;
     }
 
+    /* ปุ่มล้างข้อมูลสีแดงสไตล์ Human Made */
+    .btn-clear {
+      background-color: #d9534f;
+      color: white;
+    }
+
     .barcode-result {
       margin-top: 30px;
       padding: 25px 15px;
@@ -149,6 +168,15 @@
       height: auto;
     }
 
+    .slogan-text {
+      color: var(--duck-yellow);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -158,8 +186,10 @@
 <body>
 
   <div class="app-card">
-    <h1 class="brand-title">GEARS FOR FUTURISTIC TEENAGERS</h1>
+    <img src="https://i.ibb.co/3s8b0XG/human-made-logo.png" alt="Human Made Duck Logo" class="brand-logo">
+    <h1 class="welcome-title">ยินดีต้อนรับ</h1>
     <div class="subtitle">AUTOMATIC BARCODE • PREFIX 110765</div>
+    <div class="credit-text">CREATE BY KACHAKORN</div>
     
     <button class="btn btn-main" id="camBtn" onclick="toggleCamera()">เปิดกล้องสแกนเนอร์</button>
     
@@ -167,16 +197,20 @@
     
     <input type="text" id="scanInput" class="input-box" placeholder="ALIGN CODE OR TYPE HERE..." autocomplete="off">
 
+    <button class="btn btn-clear" id="clearBtn" style="display: none;" onclick="resetForm()">ล้างข้อมูล</button>
+
     <div class="barcode-result" id="resultBox">
       <svg id="barcode"></svg>
-      <button class="btn btn-secondary" style="margin-top:20px; margin-bottom:0;" onclick="resetForm()">ล้างข้อมูล</button>
     </div>
+
+    <div class="slogan-text">STRIVING FOR THE FUTURE • DRY ALLS</div>
   </div>
 
   <script>
     const scanInput = document.getElementById('scanInput');
     const resultBox = document.getElementById('resultBox');
     const camBtn = document.getElementById('camBtn');
+    const clearBtn = document.getElementById('clearBtn');
     let html5QrcodeScanner = null;
 
     function toggleCamera() {
@@ -187,21 +221,18 @@
         camBtn.innerText = "ปิดหน้ากล้อง";
         camBtn.style.backgroundColor = "#d9534f";
         camBtn.style.color = "#fff";
+        clearBtn.style.display = "none";
         
-        // ค้นหาอุปกรณ์กล้องทั้งหมดเพื่อเจาะจงกล้องหลังที่ถูกต้อง
+        // แก้ไขปัญหากล้องไม่โฟกัส: สั่งให้ระบบทำการค้นหาและล็อกเลือกไปที่กล้องหลังตัวหลักที่มีความละเอียดสูงสุดโดยอัตโนมัติ
         Html5Qrcode.getCameras().then(cameras => {
           if (cameras && cameras.length > 0) {
-            // เลือกกล้องตัวสุดท้าย (มักจะเป็นกล้องหลังตัวหลักของมือถือรุ่นใหม่ๆ)
-            const backCameraId = cameras[cameras.length - 1].id;
+            // เลือกกล้องหลังตัวหลักโดยใช้ facingMode: "environment"
+            const config = { fps: 20, qrbox: { width: 300, height: 300 } };
             
             html5QrcodeScanner = new Html5Qrcode("reader");
             html5QrcodeScanner.start(
-              backCameraId, 
-              { 
-                fps: 20, 
-                // ปรับเพิ่มขนาดช่องเล็งเป็น 300x300 ใหญ่เต็มตา สแกน QR ได้ง่ายขึ้นมากครับ
-                qrbox: { width: 300, height: 300 } 
-              },
+              { facingMode: "environment" }, 
+              config,
               (decodedText) => {
                 scanInput.value = decodedText;
                 generateBarcode(decodedText);
@@ -233,6 +264,7 @@
           camBtn.innerText = "เปิดกล้องสแกนเนอร์";
           camBtn.style.backgroundColor = "var(--duck-yellow)";
           camBtn.style.color = "var(--dark-charcoal)";
+          clearBtn.style.display = "block";
         }).catch(err => console.log(err));
       }
     }
@@ -252,6 +284,7 @@
       });
 
       resultBox.style.display = "block";
+      clearBtn.style.display = "block";
     }
 
     scanInput.addEventListener('keypress', function(e) {
@@ -263,6 +296,14 @@
     function resetForm() {
       scanInput.value = "";
       resultBox.style.display = "none";
+      clearBtn.style.display = "none";
+      camBtn.innerText = "เปิดกล้องสแกนเนอร์";
+      camBtn.style.backgroundColor = "var(--duck-yellow)";
+      camBtn.style.color = "var(--dark-charcoal)";
+      document.getElementById('reader').style.display = "none";
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().catch(err => console.log(err));
+      }
       scanInput.focus();
     }
   </script>
