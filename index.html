@@ -38,7 +38,7 @@
     .app-card {
       background-color: var(--dark-charcoal);
       border: 3px solid var(--sterling-silver);
-      padding: 35px 25px;
+      padding: 40px 25px;
       border-radius: 24px;
       width: 100%;
       max-width: 440px;
@@ -47,24 +47,19 @@
       box-sizing: border-box;
     }
 
-    .brand-logo {
-      width: 80px;
-      margin-bottom: 15px;
-    }
-
     h1.welcome-title {
       font-weight: 900;
-      font-size: 32px;
+      font-size: 34px;
       color: var(--duck-yellow);
-      margin: 0 0 5px 0;
+      margin: 0 0 10px 0;
       letter-spacing: 1px;
     }
 
     .subtitle {
       color: var(--sterling-silver);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
@@ -73,7 +68,7 @@
       color: var(--duck-yellow);
       font-size: 11px;
       font-weight: 700;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
       letter-spacing: 1px;
     }
 
@@ -122,15 +117,15 @@
       background-color: #e5ad1c;
     }
 
-    /* --- สไตล์ของหน้าต่างป๊อปอัปสแกนกล้อง (Modal) --- */
-    .scanner-modal {
-      display: none; /* ซ่อนไว้เริ่มต้น */
+    /* --- หน้าต่างป๊อปอัปทั่วไป (โครงสร้างพื้นฐาน) --- */
+    .custom-modal {
+      display: none; 
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
+      background-color: rgba(0, 0, 0, 0.92);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -139,6 +134,7 @@
       box-sizing: border-box;
     }
 
+    /* --- หน้าต่างป๊อปอัปสแกนกล้อง --- */
     .scanner-content {
       width: 100%;
       max-width: 400px;
@@ -174,41 +170,79 @@
       background-color: #bd3a37;
     }
 
-    /* โซนแสดงผลบาร์โค้ดที่เจนขึ้นมาใหม่ */
-    .barcode-result {
-      margin-top: 20px;
-      padding: 25px 15px;
+    /* --- หน้าต่างป๊อปอัปผลลัพธ์บาร์โค้ดขนาดใหญ่พิเศษ --- */
+    .barcode-popup-content {
+      width: 100%;
+      max-width: 460px;
       background-color: var(--vintage-cream);
-      border-radius: 16px;
-      border: 2px solid var(--duck-yellow);
-      display: none;
-      animation: fadeIn 0.35s ease-out;
+      padding: 35px 20px;
+      border-radius: 24px;
+      border: 4px solid var(--duck-yellow);
+      text-align: center;
+      box-sizing: border-box;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      animation: popupScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    #barcode {
-      max-width: 100%;
-      height: auto;
+    .barcode-popup-title {
+      color: var(--dark-charcoal);
+      font-weight: 900;
+      font-size: 20px;
+      margin: 0 0 25px 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .barcode-wrapper {
+      width: 100%;
+      background-color: #ffffff;
+      padding: 25px 10px;
+      border-radius: 14px;
+      border: 2px solid var(--sterling-silver);
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* สั่งขยายขนาดบาร์โค้ดให้ใหญ่เต็มพิกัดและยิงง่าย */
+    #popupBarcode {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 110px;
+    }
+
+    .btn-close-barcode {
+      background-color: var(--dark-charcoal);
+      color: var(--vintage-cream);
+      border: 2px solid var(--dark-charcoal);
+      margin-top: 25px;
+      margin-bottom: 0;
+    }
+
+    .btn-close-barcode:hover {
+      background-color: transparent;
+      color: var(--dark-charcoal);
     }
 
     .slogan-text {
       color: var(--duck-yellow);
       font-size: 12px;
       font-weight: 700;
-      margin-top: 30px;
+      margin-top: 35px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes popupScale {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
   <div class="app-card">
-    <img src="https://i.ibb.co/3s8b0XG/human-made-logo.png" alt="Human Made Duck Logo" class="brand-logo">
     <h1 class="welcome-title">ยินดีต้อนรับ</h1>
     <div class="subtitle">AUTOMATIC BARCODE • PREFIX 110765</div>
     <div class="credit-text">CREATE BY KACHAKORN</div>
@@ -217,14 +251,10 @@
     
     <button class="btn btn-main" onclick="openScanner()">เปิดกล้องสแกนเนอร์</button>
 
-    <div class="barcode-result" id="resultBox">
-      <svg id="barcode"></svg>
-    </div>
-
     <div class="slogan-text">STRIVING FOR THE FUTURE • DRY ALLS</div>
   </div>
 
-  <div class="scanner-modal" id="scannerModal">
+  <div class="custom-modal" id="scannerModal">
     <div class="scanner-content">
       <div class="camera-wrapper">
         <div id="reader"></div>
@@ -233,26 +263,35 @@
     </div>
   </div>
 
+  <div class="custom-modal" id="barcodeResultModal">
+    <div class="barcode-popup-content">
+      <div class="barcode-popup-title">สแกนสำเร็จ / BARCODE READY</div>
+      
+      <div class="barcode-wrapper">
+        <svg id="popupBarcode"></svg>
+      </div>
+      
+      <button class="btn btn-close-barcode" onclick="closeBarcodeModal()">ปิดหน้าต่างนี้</button>
+    </div>
+  </div>
+
   <script>
     const scanInput = document.getElementById('scanInput');
-    const resultBox = document.getElementById('resultBox');
     const scannerModal = document.getElementById('scannerModal');
+    const barcodeResultModal = document.getElementById('barcodeResultModal');
     let html5QrcodeScanner = null;
 
-    // ฟังก์ชันเปิดหน้าต่างป๊อปอัปสแกนกล้อง
+    // เปิดกล้องสแกนเนอร์
     function openScanner() {
-      resultBox.style.display = "none"; // ซ่อนบาร์โค้ดอันเก่าก่อนสแกนใหม่
       scannerModal.style.display = "flex";
-      
       html5QrcodeScanner = new Html5Qrcode("reader");
       
-      // การตั้งค่าขั้นสูงเพื่อให้กล้องจับโฟกัสอัตโนมัติตลอดเวลา สแกนง่าย ไม่เบลอ
       const config = { 
         fps: 25, 
         qrbox: { width: 280, height: 280 },
         videoConstraints: {
           facingMode: "environment",
-          advanced: [{ focusMode: "continuous" }] // บังคับโฟกัสต่อเนื่อง
+          advanced: [{ focusMode: "continuous" }] // บังคับโฟกัสต่อเนื่องตลอดเวลา
         }
       };
 
@@ -260,19 +299,19 @@
         { facingMode: "environment" }, 
         config,
         (decodedText) => {
-          // สแกนสำเร็จ: บันทึกค่า ปิดหน้าต่าง และเจนบาร์โค้ด
+          // สแกนสำเร็จ: บันทึกค่า, ปิดกล้อง, และเปิดป๊อปอัปบาร์โค้ดทันที
           scanInput.value = decodedText;
-          generateBarcode(decodedText);
-          closeScanner();
+          generatePopupBarcode(decodedText);
+          closeScannerAfterSuccess();
         },
-        (err) => { /* กำลังตรวจจับวัตถุในกล้อง */ }
+        (err) => { /* ระบบกำลังทำงาน */ }
       ).catch(err => {
-        alert("ไม่สามารถเปิดระบบกล้องได้: " + err + "\n\nอย่าลืมอนุญาตสิทธิ์การเข้าถึงกล้องให้เบราว์เซอร์ด้วยนะครับ");
+        alert("ไม่สามารถเปิดกล้องได้: " + err + "\n\nกรุณาตรวจสอบสิทธิ์กล้องบนเบราว์เซอร์ของคุณ");
         closeScanner();
       });
     }
 
-    // ฟังก์ชันปิดหน้าต่างป๊อปอัป (ล้างข้อมูล/ยกเลิก)
+    // ปิดกล้องกรณีผู้ใช้กด "ล้างข้อมูล"
     function closeScanner() {
       if (html5QrcodeScanner) {
         html5QrcodeScanner.stop().then(() => {
@@ -288,28 +327,53 @@
       scanInput.value = "";
     }
 
-    // ฟังก์ชันสร้างบาร์โค้ด 110765
-    function generateBarcode(rawValue) {
+    // ฟังก์ชันภายในใช้ปิดกล้องอย่างปลอดภัยหลังสแกนติด
+    function closeScannerAfterSuccess() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          scannerModal.style.display = "none";
+          html5QrcodeScanner = null;
+        }).catch(err => {
+          console.log(err);
+          scannerModal.style.display = "none";
+        });
+      } else {
+        scannerModal.style.display = "none";
+      }
+    }
+
+    // ฟังก์ชันสร้างบาร์โค้ดขนาดใหญ่ลงบนป๊อปอัปผลลัพธ์
+    function generatePopupBarcode(rawValue) {
       if (!rawValue) return;
       const finalCode = "110765" + rawValue;
 
-      JsBarcode("#barcode", finalCode, {
+      // เจนบาร์โค้ดขนาดใหญ่พิเศษลงในป๊อปอัป
+      JsBarcode("#popupBarcode", finalCode, {
         format: "CODE128",
         lineColor: "#1A1A1A",
-        background: "#F9F6F0",
-        width: 2,
-        height: 75,
+        background: "#FFFFFF",
+        width: 3,        // เพิ่มความหนาเส้นเพื่อให้ปืนสแกนง่ายขึ้นมากๆ
+        height: 100,     // เพิ่มความสูงของแท่งบาร์โค้ด
         displayValue: true,
+        fontSize: 20,    // ขนาดตัวเลขด้านล่างใหญ่ชัดเจน
         font: "Inter"
       });
 
-      resultBox.style.display = "block";
+      // เปิดหน้าต่างป๊อปอัปบาร์โค้ดแสดงผลขึ้นมาบังหน้าจอ
+      barcodeResultModal.style.display = "flex";
     }
 
-    // รองรับการทำงานเมื่อใช้เครื่องยิงหรือกด Enter ในช่องรับข้อมูล
+    // ฟังก์ชันปิดหน้าต่างป๊อปอัปบาร์โค้ด
+    function closeBarcodeModal() {
+      barcodeResultModal.style.display = "none";
+      scanInput.value = "";
+      scanInput.focus();
+    }
+
+    // รองรับกรณีพนักงานคีย์เลขเองในช่องแล้วกด Enter
     scanInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        generateBarcode(scanInput.value.trim());
+        generatePopupBarcode(scanInput.value.trim());
       }
     });
   </script>
